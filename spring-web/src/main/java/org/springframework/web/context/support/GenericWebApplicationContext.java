@@ -148,6 +148,7 @@ public class GenericWebApplicationContext extends GenericApplicationContext
 	 */
 	@Override
 	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		logger.trace("[postProcessBeanFactory]");
 		if (this.servletContext != null) {
 			beanFactory.addBeanPostProcessor(new ServletContextAwareProcessor(this.servletContext));
 			beanFactory.ignoreDependencyInterface(ServletContextAware.class);

@@ -259,6 +259,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			throws BeanCreationException {
 
 		// Let's check for lookup methods here...
+		// 对注解lookupd的支持
 		if (!this.lookupMethodsChecked.contains(beanName)) {
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
 				try {

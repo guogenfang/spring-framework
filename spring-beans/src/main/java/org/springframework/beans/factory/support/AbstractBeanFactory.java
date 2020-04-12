@@ -228,9 +228,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 返回一个指定beanname的实例，可以是共享或者独立的
 	 * Return an instance, which may be shared or independent, of the specified bean.
-	 * @param name the name of the bean to retrieve
-	 * @param requiredType the required type of the bean to retrieve
+	 * @param name the name of the bean to retrieve 取bean制定的名称
+	 * @param requiredType the required type of the bean to retrieve 取bean指定的类型
 	 * @param args arguments to use when creating a bean instance using explicit arguments
 	 * (only applied when creating a new instance as opposed to retrieving an existing one)
 	 * @param typeCheckOnly whether the instance is obtained for a type check,
@@ -243,10 +244,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
 		final String beanName = transformedBeanName(name);
+		logger.debug("[doGetBean] 获取bean实例，先从缓存中取，没有则实例化bean， beanName: " + beanName);
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		// 从缓存中拿实例
 		Object sharedInstance = getSingleton(beanName);
+		//如果缓存里面能拿到实例
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
 				if (isSingletonCurrentlyInCreation(beanName)) {
@@ -254,15 +258,18 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							"' that is not fully initialized yet - a consequence of a circular reference");
 				}
 				else {
-					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
+					logger.trace("返回缓存的bean单例实例 '" + beanName + "'");
 				}
 			}
+			//该方法是factoryBean接口的调用接口
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
+			// 如果singletonObjects 缓存里面没有，则走下来
+			// 如果是scope是Prototype的，检验是否出现循环依赖，如果有则直接报错
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -294,9 +301,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
+				//父子BeanDefinition合并
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
+				// 获取依赖对象属性，依赖对象要先实例化
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
@@ -307,6 +316,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 						registerDependentBean(dep, beanName);
 						try {
+							// 实例化
 							getBean(dep);
 						}
 						catch (NoSuchBeanDefinitionException ex) {
@@ -315,9 +325,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 					}
 				}
-
+				//着重看，大部分是单例的情况
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					// 返回在给定的bean name注册的单例对象，如果还没有注册则创建和注册一个新的对象
+					// 调用DefaultSingletonBeanRegistry 创建bean单例对象，并添加到缓存map  beanName->beanObject
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							return createBean(beanName, mbd, args);
@@ -1294,6 +1306,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 如果给定的beanDefinition是子beanDefinition，则通过与父类合并返回
 	 * Return a RootBeanDefinition for the given bean, by merging with the
 	 * parent if the given bean's definition is a child bean definition.
 	 * @param beanName the name of the bean definition
@@ -1372,6 +1385,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// Cache the merged bean definition for the time being
 				// (it might still get re-merged later on in order to pick up metadata changes)
 				if (containingBd == null && isCacheBeanMetadata()) {
+					logger.debug("[getMergedBeanDefinition]临时缓存bean definition: " + mbd);
 					this.mergedBeanDefinitions.put(beanName, mbd);
 				}
 			}

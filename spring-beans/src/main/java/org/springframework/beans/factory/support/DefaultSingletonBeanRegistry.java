@@ -131,6 +131,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param singletonObject the singleton object
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
+		logger.trace("[addSingleton] 缓存bean的单例对象 beanName:" + beanName + ",singletonObject:" + singletonObject);
 		synchronized (this.singletonObjects) {
 			this.singletonObjects.put(beanName, singletonObject);
 			this.singletonFactories.remove(beanName);
@@ -192,10 +193,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
+	 * //返回给定名称下注册的单例对象，如果没有注册，则创建和注册一个新的对象
 	 * Return the (raw) singleton object registered under the given name,
 	 * creating and registering a new one if none registered yet.
 	 * @param beanName the name of the bean
-	 * @param singletonFactory the ObjectFactory to lazily create the singleton
+	 * @param singletonFactory the ObjectFactory to lazily create the singleton 创建bean的接口实现，lambda方式
 	 * with, if necessary
 	 * @return the registered singleton object
 	 */
@@ -210,7 +212,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 							"(Do not request a bean from a BeanFactory in a destroy method implementation!)");
 				}
 				if (logger.isDebugEnabled()) {
-					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
+					logger.debug("创建共享实例对象 bean: '" + beanName + "', singletonFactory: " + singletonFactory.toString());
 				}
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
@@ -245,6 +247,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
+					//添加bean单例对象到单例缓存map里，getBean的时候直接从cache里取
 					addSingleton(beanName, singletonObject);
 				}
 			}

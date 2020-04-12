@@ -35,6 +35,8 @@ import org.springframework.aop.SpringProxy;
  *
  * <p>In general, specify {@code proxyTargetClass} to enforce a CGLIB proxy,
  * or specify one or more interfaces to use a JDK dynamic proxy.
+ * JDK动态代理：其代理对象必须是某个接口的实现，它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理。
+ * CGLIB代理：在运行期间生成的代理对象是针对目标类扩展的子类。底层是依赖ASM(开源的字节码编辑类库)操作字节码实现的，性能比jdk强
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -48,6 +50,11 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+		/**
+		 * isOptimize isProxyTargetClass是AopConfig配置管理类提供的属性配置，默认false
+		 * 主要判断被代理的对象是否有接口实现，true用jdk动态代理，false用cglib代理
+		 *
+		 **/
 		if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) {
 			Class<?> targetClass = config.getTargetClass();
 			if (targetClass == null) {
@@ -65,6 +72,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 	}
 
 	/**
+	 * 判断被代理的对象是否有接口实现
 	 * Determine whether the supplied {@link AdvisedSupport} has only the
 	 * {@link org.springframework.aop.SpringProxy} interface specified
 	 * (or no proxy interfaces specified at all).

@@ -40,6 +40,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ * 默认bean工厂对象实例化策略 CGLIB
  * Default object instantiation strategy for use in BeanFactories.
  *
  * <p>Uses CGLIB to generate subclasses dynamically if methods need to be

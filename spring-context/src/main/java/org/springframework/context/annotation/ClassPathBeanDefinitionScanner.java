@@ -36,6 +36,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.PatternMatchUtils;
 
 /**
+ * 该类根据提供个基础包名，扫描classpath下与该包名的路径下，找到符合条件的类并注册到spring的BeanDefinition注册器中。
+ * 默认情况下，ClassPathBeanDefinitionScanner将会扫面所有用Spring指定了的注解标识了的类，
+ * 包括：@Component @Repository @Service @Controller也可以对扫描的机制进行配置，设置一些Filter，只有满足Filter的类才能被注册为Bean
+ *
  * A bean definition scanner that detects bean candidates on the classpath,
  * registering corresponding bean definitions with a given registry ({@code BeanFactory}
  * or {@code ApplicationContext}).
@@ -77,6 +81,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 
 	/**
+	 * 为bean工厂创建一个bean扫描仪
 	 * Create a new {@code ClassPathBeanDefinitionScanner} for the given bean factory.
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
@@ -163,9 +168,11 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		this.registry = registry;
 
 		if (useDefaultFilters) {
+			//注册默认的过滤器
 			registerDefaultFilters();
 		}
 		setEnvironment(environment);
+		//设置资源加载器
 		setResourceLoader(resourceLoader);
 	}
 
@@ -270,9 +277,11 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
+		logger.debug("[doScan] 扫描包，返回注册的beanDefinition");
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
 		for (String basePackage : basePackages) {
+			//扫描到有注解的类
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
@@ -282,6 +291,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					//支持了@Lazy @DependOn注解
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
 				if (checkCandidate(beanName, candidate)) {
@@ -289,6 +299,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					//defaultListableBeanFactory 默认bean工厂 缓存注册BeanDefinition
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}

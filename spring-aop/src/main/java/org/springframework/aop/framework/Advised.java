@@ -49,6 +49,7 @@ public interface Advised extends TargetClassAware {
 	boolean isProxyTargetClass();
 
 	/**
+	 * 返回AOP代理需要的接口
 	 * Return the interfaces proxied by the AOP proxy.
 	 * <p>Will not include the target class, which may also be proxied.
 	 */

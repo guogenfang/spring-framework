@@ -242,6 +242,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		logger.trace("[postProcessBeanFactory]通过用CGLIB增强的子类替换bean请求，为在运行时维护bean请求准备配置类。");
 		int factoryId = System.identityHashCode(beanFactory);
 		if (this.factoriesPostProcessed.contains(factoryId)) {
 			throw new IllegalStateException(

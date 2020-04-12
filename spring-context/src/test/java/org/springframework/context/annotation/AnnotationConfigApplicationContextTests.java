@@ -49,14 +49,17 @@ class AnnotationConfigApplicationContextTests {
 	void scanAndRefresh() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("org.springframework.context.annotation6");
+		System.out.println("-------------------------------sacn---------------------");
 		context.refresh();
-
-		context.getBean(uncapitalize(ConfigForScanning.class.getSimpleName()));
-		context.getBean("testBean"); // contributed by ConfigForScanning
-		context.getBean(uncapitalize(ComponentForScanning.class.getSimpleName()));
-		context.getBean(uncapitalize(Jsr330NamedForScanning.class.getSimpleName()));
-		Map<String, Object> beans = context.getBeansWithAnnotation(Configuration.class);
-		assertThat(beans).hasSize(1);
+		System.out.println("--------------------------------------------------------");
+		ConfigForScanning s = context.getBean(ConfigForScanning.class);
+		System.out.println(s);
+//		context.getBean(uncapitalize(ConfigForScanning.class.getSimpleName()));
+//		context.getBean("testBean"); // contributed by ConfigForScanning
+//		context.getBean(uncapitalize(ComponentForScanning.class.getSimpleName()));
+//		context.getBean(uncapitalize(Jsr330NamedForScanning.class.getSimpleName()));
+//		Map<String, Object> beans = context.getBeansWithAnnotation(Configuration.class);
+//		assertThat(beans).hasSize(1);
 	}
 
 	@Test

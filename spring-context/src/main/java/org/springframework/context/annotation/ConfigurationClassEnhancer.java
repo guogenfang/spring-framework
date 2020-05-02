@@ -18,6 +18,7 @@ package org.springframework.context.annotation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ggf.JavaStackTrace;
 import org.springframework.aop.scope.ScopedProxyFactoryBean;
 import org.springframework.asm.Type;
 import org.springframework.beans.factory.BeanFactory;
@@ -106,6 +107,7 @@ class ConfigurationClassEnhancer {
 			logger.trace(String.format("成功地增强类(cglib) %s; 增强后的类名: %s",
 					configClass.getName(), enhancedClass.getName()));
 		}
+		JavaStackTrace.getStackTrace();
 		return enhancedClass;
 	}
 

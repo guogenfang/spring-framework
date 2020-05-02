@@ -420,8 +420,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	@Override
 	protected Object createBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
 			throws BeanCreationException {
-
-		logger.debug("[createBean] 创建bean实例 '" + beanName + "'");
+		logger.trace("[createBean] 开始创建bean实例 '" + beanName + "'");
 		RootBeanDefinition mbdToUse = mbd;
 
 		// Make sure bean class is actually resolved at this point, and
@@ -459,7 +458,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
-				logger.trace("[createBean]创建完成bean实例 '" + beanInstance + "'");
+				logger.trace("[createBean] 完成创建bean实例 '" + beanInstance + "'");
 			}
 			return beanInstance;
 		} catch (BeanCreationException | ImplicitlyAppearedSingletonException ex) {

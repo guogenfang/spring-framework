@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
  * @Author ggf
  * @Date 2020/4/9 11:18
  **/
-//@Service
+@Service
 public class ServiceForScanning {
 }

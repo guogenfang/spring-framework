@@ -222,6 +222,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+		logger.debug("------start-------[postProcessBeanDefinitionRegistry]");
 		int registryId = System.identityHashCode(registry);
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
@@ -234,6 +235,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		this.registriesPostProcessed.add(registryId);
 
 		processConfigBeanDefinitions(registry);
+		logger.debug("------stop-------[postProcessBeanDefinitionRegistry]");
 	}
 
 	/**

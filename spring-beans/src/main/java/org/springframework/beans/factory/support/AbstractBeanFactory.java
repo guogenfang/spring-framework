@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.ggf.JavaStackTrace;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
@@ -242,9 +243,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-
+		JavaStackTrace.getStackTrace();
 		final String beanName = transformedBeanName(name);
-		logger.debug("[doGetBean] 获取bean实例，先从缓存中取，没有则实例化bean， beanName: " + beanName);
+		logger.debug("----start-------[doGetBean] 获取bean实例，先从缓存中取，没有则实例化bean， beanName: " + beanName);
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
@@ -407,6 +408,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				throw new BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());
 			}
 		}
+		logger.debug("----stop-------[doGetBean] 获取bean实例，先从缓存中取，没有则实例化bean， beanName: " + beanName);
+		System.out.println();
 		return (T) bean;
 	}
 

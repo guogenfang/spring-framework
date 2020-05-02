@@ -23,6 +23,13 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
+ * 描述bean的实例，例如类名、scope、属性、构造函数参数列表、依赖的bean、是否是单例类、是否是懒加载等
+ * 其实就是将Bean的定义信息存储到这个BeanDefinition相应的属性中
+ * 后面对Bean的操作就直接对BeanDefinition进行
+ * 例如拿到这个BeanDefinition后，可以根据里面的类名、构造函数、构造函数参数，使用反射进行对象创建。
+ *
+ * 主要目的是允许 BeanFactoryPostProcessor进行内部检查和修改属性值以及其他bean元数据
+ *
  * A BeanDefinition describes a bean instance, which has property values,
  * constructor argument values, and further information supplied by
  * concrete implementations.
@@ -41,6 +48,7 @@ import org.springframework.lang.Nullable;
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
+	 * bean实例 单例作用域
 	 * Scope identifier for the standard singleton scope: {@value}.
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
@@ -86,6 +94,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	// Modifiable attributes
 
 	/**
+	 * 设置当前bean 描述的父节点名称
 	 * Set the name of the parent definition of this bean definition, if any.
 	 */
 	void setParentName(@Nullable String parentName);
@@ -97,6 +106,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String getParentName();
 
 	/**
+	 * 指定此Bean定义的Bean类名称。
+	 * 可以在bean工厂后处理期间修改类名，通常用解析后的变体替换原始类名。
 	 * Specify the bean class name of this bean definition.
 	 * <p>The class name can be modified during bean factory post-processing,
 	 * typically replacing the original class name with a parsed variant of it.

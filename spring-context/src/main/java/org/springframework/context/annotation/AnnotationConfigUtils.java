@@ -21,6 +21,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -55,7 +57,7 @@ import org.springframework.util.ClassUtils;
  * @see ConfigurationClassPostProcessor
  * @see CommonAnnotationBeanPostProcessor
  * @see org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor
- * @see org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor
+// * @see org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor
  */
 public abstract class AnnotationConfigUtils {
 
@@ -121,6 +123,8 @@ public abstract class AnnotationConfigUtils {
 
 	private static final boolean jpaPresent;
 
+	protected final static Log logger = LogFactory.getLog(AnnotationConfigUtils.class);
+
 	static {
 		ClassLoader classLoader = AnnotationConfigUtils.class.getClassLoader();
 		jsr250Present = ClassUtils.isPresent("javax.annotation.Resource", classLoader);
@@ -147,7 +151,7 @@ public abstract class AnnotationConfigUtils {
 	 */
 	public static Set<BeanDefinitionHolder> registerAnnotationConfigProcessors(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
-
+		logger.trace("[registerAnnotationConfigProcessors] 注入bean的后置处理器");
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
@@ -205,7 +209,7 @@ public abstract class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_FACTORY_BEAN_NAME));
 		}
-
+		logger.trace("注册的bean definition " + beanDefs);
 		return beanDefs;
 	}
 

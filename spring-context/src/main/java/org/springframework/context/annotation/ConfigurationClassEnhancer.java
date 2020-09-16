@@ -104,7 +104,7 @@ class ConfigurationClassEnhancer {
 		}
 		Class<?> enhancedClass = createClass(newEnhancer(configClass, classLoader));
 		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("成功地增强类(cglib) %s; 增强后的类名: %s",
+			logger.trace(String.format("创建增强类(cglib) %s; 增强后的类名: %s",
 					configClass.getName(), enhancedClass.getName()));
 		}
 		JavaStackTrace.getStackTrace();
@@ -482,7 +482,7 @@ class ConfigurationClassEnhancer {
 
 		private Object createInterfaceProxyForFactoryBean(final Object factoryBean, Class<?> interfaceType,
 														  final ConfigurableBeanFactory beanFactory, final String beanName) {
-
+			logger.debug("使用jdk Proxy创建代理对象,接口代理,beanName:" + beanName + ",interfaceType:" + interfaceType + ",factoryBean:" + factoryBean);
 			return Proxy.newProxyInstance(
 					factoryBean.getClass().getClassLoader(), new Class<?>[]{interfaceType},
 					(proxy, method, args) -> {
@@ -495,7 +495,7 @@ class ConfigurationClassEnhancer {
 
 		private Object createCglibProxyForFactoryBean(final Object factoryBean,
 													  final ConfigurableBeanFactory beanFactory, final String beanName) {
-
+			logger.debug("使用cglib创建代理对象,beanName:" + beanName + ",factoryBean:" + factoryBean);
 			Enhancer enhancer = new Enhancer();
 			enhancer.setSuperclass(factoryBean.getClass());
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);

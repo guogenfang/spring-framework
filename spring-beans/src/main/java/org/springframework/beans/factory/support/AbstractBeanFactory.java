@@ -243,13 +243,19 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-		JavaStackTrace.getStackTrace();
+//		JavaStackTrace.getStackTrace();
+		//转换对应的beanName，1、带&前缀的去掉前缀 2、从aliasMap中找name对应id，bean没有匹配id就用name
 		final String beanName = transformedBeanName(name);
 		logger.debug("----start-------[doGetBean] 获取bean实例，先从缓存中取，没有则实例化bean， beanName: " + beanName);
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
-		// 从缓存中拿实例
+		// 从缓存singleton cache 中找，没有则创建
+		// 先处理循环依赖关系，比如 A->B B->A
+		// getBean(A)获取到A的实例，此时还未进行注入
+		// 开始注入，发现B属性，开始getBean(B)获取到B的实例
+		// 开始开始对B注入，发现A属性，获取到还未注入完成的A属性，即处于isSingletonCurrentlyInCreation的A
+		// 完成B的注入，getBean(B)完成，然后的注入也完成，也就是在构建单例的时候，会将还未完成注入的A提前暴露，便于B的完成注入。
 		Object sharedInstance = getSingleton(beanName);
 		//如果缓存里面能拿到实例
 		if (sharedInstance != null && args == null) {

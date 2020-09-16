@@ -442,6 +442,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			/**
+			 * AOP相关
 			 * targetSource接口的运行，可以在用改一个类实现该接口，然后在里面定义实例化对象的方式
 			 * 然后返回，也就是说不需要spring帮组我们实例化对象
 			 **/
@@ -489,6 +490,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeanCreationException {
 
 		// Instantiate the bean.
+		// 创建
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
@@ -528,6 +530,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Initialize the bean instance.
+		// 属性赋值
 		Object exposedObject = bean;
 		try {
 			populateBean(beanName, mbd, instanceWrapper);

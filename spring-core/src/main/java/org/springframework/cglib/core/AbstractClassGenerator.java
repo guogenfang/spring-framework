@@ -127,10 +127,10 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 		}
 
 		public Object get(AbstractClassGenerator gen, boolean useCache) {
+			//判断是否开启缓存，可直接设置：enhancer.setUseCache(false);默认为true
 			if (!useCache) {
 				return gen.generate(ClassLoaderData.this);
-			}
-			else {
+			} else {
 				Object cachedValue = generatedClasses.get(gen);
 				return gen.unwrapCachedValue(cachedValue);
 			}
@@ -316,16 +316,15 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 				}
 			}
 			this.key = key;
+			//调用 get方法获取字节码，如果没有字节码，则会创建字节码
 			Object obj = data.get(this, getUseCache());
 			if (obj instanceof Class) {
 				return firstInstance((Class) obj);
 			}
 			return nextInstance(obj);
-		}
-		catch (RuntimeException | Error ex) {
+		} catch (RuntimeException | Error ex) {
 			throw ex;
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new CodeGenerationException(ex);
 		}
 	}
@@ -341,37 +340,37 @@ abstract public class AbstractClassGenerator<T> implements ClassGenerator {
 						getClassName() + ". It seems that the loader has been expired from a weak reference somehow. " +
 						"Please file an issue at cglib's issue tracker.");
 			}
+			//生成代理类名称
 			synchronized (classLoader) {
 				String name = generateClassName(data.getUniqueNamePredicate());
 				data.reserveName(name);
 				this.setClassName(name);
 			}
+			//这里通过应用类加载器和类名称尝试加载，如果加载不到，才开始创建字节码
 			if (attemptLoad) {
 				try {
 					gen = classLoader.loadClass(getClassName());
 					return gen;
-				}
-				catch (ClassNotFoundException e) {
+				} catch (ClassNotFoundException e) {
 					// ignore
 				}
 			}
+			//通过生成策略创建字节码，当前对象即为Enhancer对象，字节数组形式
 			byte[] b = strategy.generate(this);
 			String className = ClassNameReader.getClassName(new ClassReader(b));
 			ProtectionDomain protectionDomain = getProtectionDomain();
 			synchronized (classLoader) { // just in case
 				// SPRING PATCH BEGIN
+				//将字节码加载到JVM内存，同时会触发代理对象初始化
 				gen = ReflectUtils.defineClass(className, b, classLoader, protectionDomain, contextClass);
 				// SPRING PATCH END
 			}
 			return gen;
-		}
-		catch (RuntimeException | Error ex) {
+		} catch (RuntimeException | Error ex) {
 			throw ex;
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new CodeGenerationException(ex);
-		}
-		finally {
+		} finally {
 			CURRENT.set(save);
 		}
 	}

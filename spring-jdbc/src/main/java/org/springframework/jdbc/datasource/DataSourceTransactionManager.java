@@ -22,6 +22,8 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.lang.Nullable;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -113,11 +115,12 @@ import org.springframework.util.Assert;
 public class DataSourceTransactionManager extends AbstractPlatformTransactionManager
 		implements ResourceTransactionManager, InitializingBean {
 
+	protected final Log logger = LogFactory.getLog(getClass());
+
 	@Nullable
 	private DataSource dataSource;
 
 	private boolean enforceReadOnly = false;
-
 
 	/**
 	 * Create a new DataSourceTransactionManager instance.
@@ -134,6 +137,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	 */
 	public DataSourceTransactionManager(DataSource dataSource) {
 		this();
+		logger.debug("init DataSourceTransactionManager");
 		setDataSource(dataSource);
 		afterPropertiesSet();
 	}

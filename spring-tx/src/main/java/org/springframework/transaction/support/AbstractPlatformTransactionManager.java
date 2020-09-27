@@ -340,7 +340,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	@Override
 	public final TransactionStatus getTransaction(@Nullable TransactionDefinition definition)
 			throws TransactionException {
-
+		logger.debug("[getTransaction]");
 		// Use defaults if no transaction definition given.
 		TransactionDefinition def = (definition != null ? definition : TransactionDefinition.withDefaults());
 

@@ -328,7 +328,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	@Nullable
 	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
 			final InvocationCallback invocation) throws Throwable {
-
+		logger.debug("[invokeWithinTransaction] method:" + method + ",targetClass" + targetClass + ",InvocationCallback:" + invocation);
 		// If the transaction attribute is null, the method is non-transactional.
 		TransactionAttributeSource tas = getTransactionAttributeSource();
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
@@ -555,7 +555,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	@SuppressWarnings("serial")
 	protected TransactionInfo createTransactionIfNecessary(@Nullable PlatformTransactionManager tm,
 			@Nullable TransactionAttribute txAttr, final String joinpointIdentification) {
-
+		logger.debug("[createTransactionIfNecessary] transactionManger=" + tm + ",TransactionAttribute=" + txAttr);
 		// If no name specified, apply method identification as transaction name.
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionAttribute(txAttr) {

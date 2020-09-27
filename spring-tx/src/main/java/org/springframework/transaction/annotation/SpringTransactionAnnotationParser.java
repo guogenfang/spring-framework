@@ -21,6 +21,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -38,6 +40,7 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
  */
 @SuppressWarnings("serial")
 public class SpringTransactionAnnotationParser implements TransactionAnnotationParser, Serializable {
+	protected transient Log logger = LogFactory.getLog(getClass());
 
 	@Override
 	public boolean isCandidateClass(Class<?> targetClass) {
@@ -50,6 +53,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		AnnotationAttributes attributes = AnnotatedElementUtils.findMergedAnnotationAttributes(
 				element, Transactional.class, false, false);
 		if (attributes != null) {
+			logger.debug("[parseTransactionAnnotation] " + element + ",attributes:" + attributes);
 			return parseTransactionAnnotation(attributes);
 		}
 		else {

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.springframework.transaction.interceptor.TransactionInterceptor</OriginalElement>
+  <nodes>
+    <node x="556.7954545454545" y="82.0">java.lang.FunctionalInterface</node>
+    <node x="667.75" y="164.0">org.aopalliance.intercept.MethodInterceptor</node>
+    <node x="791.7954545454545" y="82.0">org.aopalliance.intercept.Interceptor</node>
+    <node x="0.0" y="164.0">java.lang.SuppressWarnings</node>
+    <node x="335.5454545454545" y="246.0">org.springframework.transaction.interceptor.TransactionInterceptor</node>
+    <node x="137.2954545454545" y="82.0">org.springframework.beans.factory.BeanFactoryAware</node>
+    <node x="207.99999999999994" y="164.0">org.springframework.transaction.interceptor.TransactionAspectSupport</node>
+    <node x="185.2954545454545" y="0.0">org.springframework.beans.factory.Aware</node>
+    <node x="813.7954545454545" y="0.0">org.aopalliance.aop.Advice</node>
+    <node x="345.2954545454545" y="82.0">org.springframework.beans.factory.InitializingBean</node>
+    <node x="494.74999999999994" y="164.0">java.io.Serializable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.springframework.transaction.interceptor.TransactionInterceptor" target="org.springframework.transaction.interceptor.TransactionAspectSupport">
+      <point x="-30.125" y="-16.0" />
+      <point x="425.9204545454545" y="216.0" />
+      <point x="337.49999999999994" y="216.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.transaction.interceptor.TransactionAspectSupport" target="org.springframework.beans.factory.BeanFactoryAware">
+      <point x="-64.75" y="-16.0" />
+      <point x="272.74999999999994" y="139.0" />
+      <point x="231.2954545454545" y="139.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.transaction.interceptor.TransactionInterceptor" target="org.aopalliance.intercept.MethodInterceptor">
+      <point x="90.375" y="-16.0" />
+      <point x="546.4204545454545" y="226.0" />
+      <point x="766.25" y="226.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.transaction.interceptor.TransactionInterceptor" target="java.io.Serializable">
+      <point x="30.125" y="-16.0" />
+      <point x="486.1704545454545" y="216.0" />
+      <point x="571.25" y="216.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.aopalliance.intercept.Interceptor" target="org.aopalliance.aop.Advice">
+      <point x="0.0" y="-16.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.aopalliance.intercept.MethodInterceptor" target="org.aopalliance.intercept.Interceptor">
+      <point x="49.25" y="-16.0" />
+      <point x="815.5" y="139.0" />
+      <point x="863.7954545454545" y="139.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.transaction.interceptor.TransactionAspectSupport" target="org.springframework.beans.factory.InitializingBean">
+      <point x="64.75" y="-16.0" />
+      <point x="402.24999999999994" y="139.0" />
+      <point x="439.2954545454545" y="139.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.aopalliance.intercept.MethodInterceptor" target="java.lang.FunctionalInterface">
+      <point x="-49.25" y="-16.0" />
+      <point x="717.0" y="139.0" />
+      <point x="664.2954545454545" y="139.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.transaction.interceptor.TransactionInterceptor" target="java.lang.SuppressWarnings">
+      <point x="-90.375" y="-16.0" />
+      <point x="365.6704545454545" y="226.0" />
+      <point x="94.0" y="226.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="org.springframework.beans.factory.BeanFactoryAware" target="org.springframework.beans.factory.Aware">
+      <point x="0.0" y="-16.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="468.0" y="139.0" />
+  <SelectedNodes>
+    <node>org.springframework.transaction.interceptor.TransactionInterceptor</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
